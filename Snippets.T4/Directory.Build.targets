@@ -1,0 +1,16 @@
+<Project>
+  <ItemGroup>
+    <TextTemplate Include="**\*.tt" />
+    <Generated Include="**\*.Generated.cs" />
+  </ItemGroup>
+
+  <!-- See https://aka.ms/dotnet/msbuild/customize for more details on customizing your build -->
+  <Target Name="TextTemplateTransform" BeforeTargets="BeforeBuild">
+    <Exec WorkingDirectory="$(ProjectDir)"
+      Command="dotnet t4 %(TextTemplate.Identity) -c $(RootNameSpace).%(TextTemplate.Filename) -o %(TextTemplate.Filename).Generated.cs" />
+  </Target>
+
+  <Target Name="TextTemplateClean" AfterTargets="Clean">
+    <Delete Files="@(Generated)" />
+  </Target>
+</Project>
